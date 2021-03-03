@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC 
+    "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN" 
+    "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+
+
+<tiles-definitions>
+	<!-- 主页 -->
+	<definition name="home-definition" template="/WEB-INF/views/template/default_template.jsp">
+		<put-attribute name="title" type="string" value="GooglePlay" />
+		<put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+		<put-attribute name="search" value="/WEB-INF/views/common/search.jsp" />
+		<put-attribute name="asideNav" value="/WEB-INF/views/common/aside_nav.jsp" />
+		<put-attribute name="actionBar" value="/WEB-INF/views/common/action_bar.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/frame/main_content.jsp" />
+		<put-attribute name="foot" value="/WEB-INF/views/common/foot.jsp" />
+	</definition>
+	
+	<!-- 类型页 -->
+	<definition name="category-definition" template="/WEB-INF/views/template/default_template.jsp">
+		<put-attribute name="title" type="string" value="具体类型" />
+		<put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+		<put-attribute name="search" value="/WEB-INF/views/common/search.jsp" />
+		<put-attribute name="asideNav" value="/WEB-INF/views/common/aside_nav.jsp" />
+		<put-attribute name="actionBar" value="/WEB-INF/views/common/action_bar.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/frame/cat_content.jsp" />
+		<put-attribute name="foot" value="/WEB-INF/views/common/foot.jsp" />
+	</definition>
+	
+	<!-- 搜索页 -->
+	<definition name="search-definition" template="/WEB-INF/views/template/default_template.jsp">
+		<put-attribute name="title" type="string" value="搜索结果" />
+		<put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+		<put-attribute name="search" value="/WEB-INF/views/common/search.jsp" />
+		<put-attribute name="asideNav" value="/WEB-INF/views/common/aside_nav.jsp" />
+		<put-attribute name="actionBar" value="/WEB-INF/views/common/action_bar.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/frame/search_content.jsp" />
+		<put-attribute name="foot" value="/WEB-INF/views/common/foot.jsp" />
+	</definition>
+	
+	<!--  详情页 -->
+	<definition name="detail-definition" template="/WEB-INF/views/template/default_template.jsp">
+	    <put-attribute name="title" type="string" value="详细信息" />
+	    <put-attribute name="header" value="/WEB-INF/views/common/header.jsp" />
+		<put-attribute name="search" value="/WEB-INF/views/common/search.jsp" />
+		<put-attribute name="asideNav" value="/WEB-INF/views/common/aside_nav.jsp" />
+		<put-attribute name="actionBar" value="/WEB-INF/views/common/action_bar.jsp" />
+		<put-attribute name="content" value="/WEB-INF/views/frame/detail_content.jsp" />
+		<put-attribute name="foot" value="/WEB-INF/views/common/foot.jsp" />
+	</definition>
+	
+	<definition name="Main-definition" template="layout.jsp">
+		<put-attribute name="title" type="string">天黑store</put-attribute>
+		<put-attribute name="content">/MainContent.jsp</put-attribute>
+	</definition>	
+
+	<definition name="firstPage-definition" template="layout.jsp">
+		<put-attribute name="title" type="string">搜索结果</put-attribute>
+		<put-attribute name="content">/firstPage.jsp</put-attribute>
+	</definition>
+</tiles-definitions>
