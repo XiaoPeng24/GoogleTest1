@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" 
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	 	http://www.springframework.org/schema/beans/spring-beans.xsd
+	 	http://www.springframework.org/schema/tx
+	 	http://www.springframework.org/schema/tx/spring-tx.xsd
+	 	http://www.springframework.org/schema/aop
+	 	http://www.springframework.org/schema/aop/spring-aop.xsd">
+	<!-- 资源属性配置器 -->
+	<bean id="propertyConfigurer"
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location">
+			<value>classpath:conf/config.properties</value>
+		</property>
+	</bean>
+	
+	<!-- 数据源 (可以使用DBCP,C3Po和Tomcat7 JDBC三种链接方式,此处选择Tomcat7 JDBC) -->
+	<bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource"
+		destroy-method="close">
+		<property name="poolProperties">
+			<bean class="org.apache.tomcat.jdbc.pool.PoolProperties">
+				<property name="url">
+					<value>${hibernate.connection.url}</value>
+				</property>
+				<property name="driverClassName">
+					<value>${hibernate.connection.driverClassName}</value>
+				</property>
+				<property name="username">
+					<value>${hibernate.connection.username}</value>
+				</property>
+				<property name="password">
+					<value>${hibernate.connection.password}</value>
+				</property>
+				<property name="jmxEnabled">
+					<value>${hibernate.connection.jmxEnabled}</value>
+				</property>
+				<property name="testWhileIdle">
+					<value>${hibernate.connection.testWhileIdle}</value>
+				</property>
+				<property name="testOnBorrow">
+					<value>${hibernate.connection.testOnBorrow}</value>
+				</property>
+				<property name="validationInterval">
+					<value>${hibernate.connection.validationInterval}</value>
+				</property>
+				<property name="testOnReturn">
+					<value>${hibernate.connection.testOnReturn}</value>
+				</property>
+				<property name="validationQuery">
+					<value>${hibernate.connection.validationQuery}</value>
+				</property>
+				<property name="timeBetweenEvictionRunsMillis">
+					<value>${hibernate.connection.timeBetweenEvictionRunsMillis}
+					</value>
+				</property>
+				<property name="maxActive">
+					<value>${hibernate.connection.maxActive}</value>
+				</property>
+				<property name="initialSize">
+					<value>${hibernate.connection.initialSize}</value>
+				</property>
+				<property name="maxWait">
+					<value>${hibernate.connection.maxWait}</value>
+				</property>
+				<property name="removeAbandonedTimeout">
+					<value>${hibernate.connection.removeAbandonedTimeout}</value>
+				</property>
+				<property name="minEvictableIdleTimeMillis">
+					<value>${hibernate.connection.minEvictableIdleTimeMillis}</value>
+				</property>
+				<property name="minIdle">
+					<value>${hibernate.connection.minIdle}</value>
+				</property>
+				<property name="logAbandoned">
+					<value>${hibernate.connection.logAbandoned}</value>
+				</property>
+				<property name="removeAbandoned">
+					<value>${hibernate.connection.removeAbandoned}</value>
+				</property>
+				<property name="jdbcInterceptors">
+					<value>${hibernate.connection.jdbcInterceptors}</value>
+				</property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- Hibernate session工厂bean -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource" />
+		</property>
+		<!-- Hibernate映射文件的装载 -->
+		<property name="mappingDirectoryLocations">
+			<list>
+				<value>classpath:com/google/play/model</value>
+			</list>
+		</property>
+		<!-- Hibernate的属性配置 -->
+		<property name="hibernateProperties">
+			<props>
+				<!-- 指定不同的数据库 -->
+				<prop key="hibernate.dialect">
+					${hibernate.dialect}
+				</prop>
+				<!-- 是否允许Hibernate使用JDBC2的可滚回结果集 -->
+				<prop key="hibernate.jdbc.use_scrollable_resultset">
+					${hibernate.jdbc.use_scrollable_resultset}
+				</prop>
+				<!-- 将Hibernate查询中的符号映射到SQL查询中的符号 -->
+				<prop key="hibernate.query.substitutions">
+					${hibernate.query.substitutions}
+				</prop>
+				<!-- 自定义ConnectionProvider的类名, 此类用来向Hibernate提供JDBC连接. -->
+				<prop key="hibernate.connection.provider_class">
+					${hibernate.connection.provider_class}
+				</prop>
+				<!-- 抓取记录的大小 -->
+				<prop key="hibernate.jdbc.fetch_size">
+					${hibernate.jdbc.fetch_size}
+				</prop>
+				<!-- 批量更新的大小 -->
+				<prop key="hibernate.jdbc.batch_size">
+					${hibernate.jdbc.batch_size}
+				</prop>
+				<!-- JDBC执行批量操作时，是否同时更新版本数据 -->
+				<prop key="hibernate.jdbc.batch_versioned_data">
+					${hibernate.jdbc.batch_versioned_data}
+				</prop>
+				<!-- 是否JDBC以二进制方式读取 -->
+				<prop key="hibernate.jdbc.use_streams_for_binary">
+					${hibernate.jdbc.use_streams_for_binary}
+				</prop>
+				<!-- 是否使用JDBC3插入记录时使用PreparedStatement.getGeneratedKeys()生成主键 -->
+				<prop key="hibernate.jdbc.use_get_generated_keys">
+					${hibernate.jdbc.use_get_generated_keys}
+				</prop>
+				<!-- 是否使用JDBC自动提交 -->
+				<prop key="hibernate.jdbc.AutoCommit">
+					${hibernate.jdbc.AutoCommit}
+				</prop>
+				<!-- 能用来完全禁止使用二级缓存. 对那些在类的映射定义中指定<cache>的类，会默认开启二级缓存 -->
+				<prop key="hibernate.cache.use_second_level_cache">
+					${hibernate.cache.use_second_level_cache}
+				</prop>
+				<!-- 允许查询缓存, 个别查询仍然需要被设置为可缓存的. -->
+				<prop key="hibernate.cache.use_query_cache">
+					${hibernate.cache.use_query_cache}
+				</prop>
+				<!-- 自定义的CacheProvider的类名. -->
+				<prop key="hibernate.cache.region.factory_class">
+					${hibernate.cache.region.factory_class}
+				</prop>
+				<prop key="hibernate.show_sql">
+					${hibernate.show_sql}
+				</prop>
+				<prop key="hibernate.connection.autocommit">
+					${hibernate.connection.autocommit}
+				</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="baseDAO" class="com.google.play.dao.base.impl.BaseDaoImpl"
+		scope="singleton">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<!-- 配置事务管理器 -->
+	<bean id="transactionManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+	<tx:advice id="txAdvice" transaction-manager="transactionManager">
+		<tx:attributes>
+			<tx:method name="get*" propagation="REQUIRED" isolation="READ_UNCOMMITTED" />
+			<tx:method name="download*" propagation="REQUIRED"
+				isolation="READ_UNCOMMITTED" />
+		</tx:attributes>
+	</tx:advice>
+	<aop:config>
+		<aop:advisor advice-ref="txAdvice"
+			pointcut="execution(* com.google.play.service..*.*(..))" />
+	</aop:config>
+</beans>

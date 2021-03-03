@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	 	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<bean id="gmailDao" class="com.google.play.dao.gmail.impl.GmailDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="gmailService" class="com.google.play.service.gmail.impl.GmailServiceImpl">
+		<property name="gmailDao">
+			<ref bean="gmailDao" />
+		</property>
+		<property name="gmailHttp">
+			<ref bean="gmailHttp" />
+		</property>
+		<property name="gmailCache">
+			<ref bean="gmailCache" />
+		</property>
+	</bean>
+
+	<bean id="gmailHttp" class="com.google.play.net.http.gmail.impl.GmailHttpImpl">
+	</bean>
+
+	<bean id="gmailHttpService"
+		class="com.google.play.service.http.gmail.impl.GmailHttpServiceImpl">
+		<property name="gmailHttp">
+			<ref bean="gmailHttp" />
+		</property>
+	</bean>
+
+	<bean id="gmailCache" class="com.google.play.cache.gmail.impl.GmailCacheImpl">
+		<property name="gmailDao">
+			<ref bean="gmailDao" />
+		</property>
+	</bean>
+
+</beans>
