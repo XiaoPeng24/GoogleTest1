@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	 	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<bean id="categoryDao" class="com.google.play.dao.category.impl.CategoryDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="categoryService"
+		class="com.google.play.service.category.impl.CategoryServiceImpl">
+		<property name="categoryDao">
+			<ref bean="categoryDao" />
+		</property>
+	</bean>
+	
+	<bean id="categoryHttp" class="com.google.play.net.http.category.impl.CategoryHttpImpl">
+	</bean>
+	
+	<bean id="categoryHttpService"
+		class="com.google.play.service.http.category.impl.CategoryHttpServiceImpl">
+		<property name="categoryHttp">
+			<ref bean="categoryHttp" />
+		</property>
+		<property name="gmailService">
+			<ref bean="gmailService" />
+		</property>
+		<property name="categoryCache">
+			<ref bean="categoryCache" />
+		</property>
+	</bean>
+	
+	<bean id="categoryCache" class="com.google.play.cache.category.impl.CategoryCacheImpl"></bean>
+	
+	<!-- 定时器配置 -->
+	<!-- 定义调用对象和调用对象的方法 -->
+	<bean id="jobtask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+            <!-- 调用的类 -->
+            <property name="targetObject">
+                <ref bean="categoryHttpService"/>
+            </property>
+            <!-- 调用类中的方法 -->
+            <property name="targetMethod">
+                <value>updateMainCategoryOntime</value>
+            </property>
+     </bean>
+     
+     <!-- 定义触发时间 -->
+        <bean id="doTime" class="org.springframework.scheduling.quartz.CronTriggerBean">
+            <property name="jobDetail">
+                <ref bean="jobtask"/>
+            </property>
+            <!-- cron表达式 -->
+            <property name="cronExpression">
+                <value>0 0 12 * * ?</value>
+            </property>
+        </bean>
+        
+     <!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序  -->
+        <bean id="startQuertz" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+            <property name="triggers">
+                <list>
+                    <ref bean="doTime"/>
+                </list>
+            </property>
+        </bean>
+</beans>

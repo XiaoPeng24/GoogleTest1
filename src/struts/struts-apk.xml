@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+	
+	
+	<package name="apk"  extends="struts-default" namespace="/">
+		<!-- 主页 -->
+		<action name="index" class="apkAction" method="index">
+			<result name="success">WEB-INF/views/home.jsp</result>
+		</action>
+		
+		<!-- 主页类型 -->
+		<action name="maincat" class="apkAction" method="getMainApk">
+			<result name="success">WEB-INF/views/frame/main_item.jsp</result>
+		</action>
+		
+		<!-- 类别 -->
+		<action name="category" class="apkAction" method="getCategoryApk">
+			<result name="category">WEB-INF/views/category.jsp</result>
+			<result name="ajax">WEB-INF/views/frame/cat_content_ajax.jsp</result>
+		</action>
+		
+		<!-- 搜索 -->
+		<action name="search" class="apkAction" method="searchApk">
+			<result name="search">WEB-INF/views/search.jsp</result>
+			<result name="ajax">WEB-INF/views/frame/search_content_ajax.jsp</result>
+		</action>
+		
+		<!--  详情 -->
+		<action name="detail" class="apkAction" method="getApkdetail">
+		    <result name="detail">WEB-INF/views/detail.jsp</result>
+			<result name="ajax">WEB-INF/views/frame/detail_content_ajax.jsp</result>
+	    </action>
+	    
+	    <!--  下载 -->
+	    <action name="download" class="apkAction" method="getDownloadURL">
+		    <result name="success">WEB-INF/views/frame/download_success.jsp</result>
+			<result name="fail">WEB-INF/views/frame/download_fail.jsp</result>
+	    </action>
+	    
+	    <!--  推荐 -->
+		<action name="recommend" class="apkAction" method="getRecommendApk">
+		    <result name="success">WEB-INF/views/frame/recommend_content_ajax.jsp</result>
+		</action>
+	</package>
+</struts>

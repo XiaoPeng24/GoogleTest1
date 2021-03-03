@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	 	http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<!-- Action Bean -->
+	<bean id="apkAction" class="com.google.play.action.apk.ApkAction"
+		scope="prototype">
+		<property name="apkService">
+			<ref bean="apkService" />
+		</property>
+		
+		<property name="apkHttpService">
+			<ref bean="apkHttpService" />
+		</property>
+		<property name="categoryHttpService">
+		    <ref bean="categoryHttpService"/>
+		</property>
+		<property name="recommendHttpService">
+		    <ref bean="recommendHttpService"/>
+		</property>
+	</bean>
+
+	<bean id="apkService" class="com.google.play.service.apk.impl.ApkServiceImpl">
+		<property name="apkDao">
+			<ref bean="apkDao" />
+		</property>
+	</bean>
+
+	<bean id="apkDao" class="com.google.play.dao.apk.impl.ApkDaoImpl">
+		<property name="sessionFactory">
+			<ref bean="sessionFactory" />
+		</property>
+	</bean>
+
+	<bean id="apkHttp" class="com.google.play.net.http.apk.impl.ApkHttpImpl">
+	    <property name="fileUtil">
+	         <ref bean="fileUtil"/>
+	    </property>
+	</bean>
+
+     <bean id="fileUtil" class="com.google.play.util.file.impl.FileUtilImpl">
+     </bean>
+     
+	<bean id="apkHttpService"
+		class="com.google.play.service.http.apk.impl.ApkHttpServiceImpl">
+		<property name="apkHttp">
+			<ref bean="apkHttp" />
+		</property>
+		<property name="apkService">
+			<ref bean="apkService" />
+		</property>
+		<property name="gmailService">
+			<ref bean="gmailService" />
+		</property>
+	</bean>
+    
+</beans>
